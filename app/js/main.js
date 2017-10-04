@@ -1,31 +1,47 @@
-function hello(user) {
-    console.log(`Hello from ${user}`);
-}
-hello("TypeScript");
-class Student {
-    constructor(firstName, middleInitial, lastName) {
-        this.firstName = firstName;
-        this.middleInitial = middleInitial;
-        this.lastName = lastName;
-        this.fullName = firstName + "" + middleInitial + "" + lastName;
-    }
-    getGreeting() {
-        return this.firstName + " " + this.middleInitial + " " + this.lastName;
-    }
-    getAge() {
-        return this.age;
-    }
-    setAge(age) {
-        this.age = age;
-    }
-}
-function greeter(person) {
-    return "Hello " + person.getGreeting();
-}
-let user = new Student("Silas", "D", "Weber");
-document.getElementById('greeting').innerText = greeter(user);
-console.log(user.getAge());
+let tableBody;
+let alertBox;
+let inputField;
 $(function () {
-    console.log('cool stuff');
+    tableBody = $("#tableBody");
+    alertBox = $("#alertBox");
+    let submittButton = $("#submitButton");
+    inputField = $("#examInput");
+    inputField.keyup(function (e) {
+        if (e.which === 13) {
+            submitRequest();
+        }
+    });
+    submittButton.click(function () {
+        submitRequest();
+    });
 });
-$.get('/php/response.php?q=01276');
+function submitRequest() {
+    let inputValue = inputField.val();
+    console.log(inputValue);
+    tableBody.empty();
+    $.get('/php/response.php?q=' + inputValue, function (response) {
+        populateRows(response);
+    });
+}
+function populateRows(tableData) {
+    if (tableData.length === 0) {
+        alertBox.removeClass('hidden');
+        alertBox.addClass('visible');
+    }
+    else {
+        alertBox.removeClass('visible');
+        alertBox.addClass('hidden');
+        for (let i = 0; i < tableData.length; i++) {
+            tableBody.append(createRowElement(tableData[i]));
+        }
+    }
+}
+function createRowElement(rowData) {
+    let tr = document.createElement("tr");
+    for (let prop in rowData) {
+        let td = document.createElement("td");
+        td.innerHTML = rowData[prop];
+        tr.appendChild(td);
+    }
+    return tr;
+}

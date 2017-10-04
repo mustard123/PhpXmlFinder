@@ -1,47 +1,59 @@
-function hello(user: string) {
-    console.log(`Hello from ${user}`);
-}
-hello("TypeScript");
+let tableBody:any;
+let alertBox: any;
+let inputField: any;
 
-class Student implements GreetAble{
-    getGreeting(): string {
-       return this.firstName + " " + this.middleInitial + " " + this.lastName
-    }
-
-    private fullName:string;
-    constructor(private firstName: string, private middleInitial: string, private lastName: string){
-        this.fullName = firstName + "" + middleInitial + "" + lastName;
-    }
-    private age: number;
-
-    getAge():number{
-        return this.age;
-    }
-
-    setAge(age:number):void{
-        this.age = age;
-    }
-
-
-}
-
-interface GreetAble{
-    getGreeting():string;
-
-}
-
-function greeter(person: GreetAble){
-    return "Hello " + person.getGreeting();
-
-}
-
-let user = new Student("Silas", "D", "Weber");
-
-document.getElementById('greeting').innerText = greeter(user);
-
-console.log(user.getAge())
 $(function(){
-    console.log('cool stuff');
+    tableBody = $("#tableBody");
+    alertBox = $("#alertBox");
+    let submittButton = $("#submitButton");
+    inputField = $("#examInput");
+
+
+    inputField.keyup(function(e:any){
+        if(e.which === 13){
+            submitRequest();
+        } 
+    })
+
+    submittButton.click(function(){
+        submitRequest();
+    })
+
 })
 
-$.get('/php/response.php?q=01276')
+function submitRequest(){
+    let inputValue = inputField.val();
+    console.log(inputValue);
+    tableBody.empty();
+    $.get('/php/response.php?q='+inputValue, function(response: Array<JSON>){
+        populateRows(response)
+    });
+
+}
+
+function populateRows(tableData :Array<JSON>){
+    if(tableData.length === 0){
+        alertBox.removeClass('hidden')
+        alertBox.addClass('visible')
+    }
+    else{
+        alertBox.removeClass('visible')
+        alertBox.addClass('hidden')    
+        for(let i=0; i < tableData.length; i++){
+            tableBody.append(createRowElement(tableData[i]))
+        }
+}
+}
+
+function createRowElement(rowData : any){
+    let tr = document.createElement("tr");
+    for(let prop in rowData){
+        let td = document.createElement("td");
+        td.innerHTML = rowData[prop];
+        tr.appendChild(td);
+    }
+    return tr;
+
+
+}
+

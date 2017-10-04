@@ -11,8 +11,11 @@ class ArchiveWalker{
     }
 
     function searchXml(array $directories, string $examNumber){
-        $queryString = "//document[field/@value=\"{$examNumber}\"]";
         $result = [];
+        if(strlen($examNumber)!=5){
+            return $result;
+        }
+        $queryString = "//document[field/@value=\"{$examNumber}\"]";
         for($i = 0; $i < count($directories); $i++ ){
             $filePath = $directories[$i] . '/'. 'DocumentIndex.xml';
             if(file_exists($filePath)){
@@ -27,14 +30,14 @@ class ArchiveWalker{
                         $temp = [];
                         $fields = $element->getElementsByTagName("field");
                         foreach($fields as $field){
-                            if ($field->getAttribute("name")=="Pruefungsnummer"){
-                                $_pln=$field->getAttribute("value");
-                                $temp['pln'] = $_pln;
-                            }
+                            preg_match('/([A-Z]\w+).+?(?=\/)/', $filePath, $matches);
+                            $temp['examName'] = $matches[0];
+
                             if ($field->getAttribute("name")=="Document ID"){
                                 $_id=$field->getAttribute("value");
                                 $temp['docID'] = $_id;
                             }
+                            
                       }
                       array_push($result, $temp);
                     }
@@ -45,16 +48,8 @@ class ArchiveWalker{
         return $result;
     }
 
-
     function finder(String $direcotory, $examNumber){
         return $this->searchXml($this->getDirectories($direcotory), $examNumber);
-        //fields where length of value attribute = 5
-        //  //field[string-length(@value)=5]
 
-        // documents where length of value attribute = 5
-        // //document[field/string-length(@value)=5]
-
-        // documents where length of value attribute = "01225"
-        // //document[field/@value="01225"]
     }
 }
