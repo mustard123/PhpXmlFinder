@@ -20,48 +20,34 @@
     </head>
     <body class="container">
         <h1>Exam Finder</h1>
-	<p id="greeting">greeting...</p>       
     </body>
 
     <div >
             <div class="form-group">
-                    <label for="examNumber">Exam number:</label>
-                    <input id="examInput" type="text" class="form-control" id="examNumber">
+                    <label for="examInput">Prüfungslaufnummer:</label>
+                    <input id="examInput" type="text" class="form-control" placeholder="e.g 01276">
                     
                   </div>
-                  <button class="btn">Search</button>
+                  <button id="submitButton" class="btn">Search</button>
         
     </div>
 
     <div>
-            <h2>Basic Table</h2>
-            <p>The .table class adds basic styling (light padding and only horizontal dividers) to a table:</p>            
-            <table class="table">
+            <h2>Results:</h2>
+              <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>Firstname</th>
-                  <th>Lastname</th>
-                  <th>Email</th>
+                  <th>Prüfung</th>
+                  <th>Scan-Nummer</th>
+                  <!-- <th>Prüfungslaufnummer</th> -->
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>John</td>
-                  <td>Doe</td>
-                  <td>john@example.com</td>
-                </tr>
-                <tr>
-                  <td>Mary</td>
-                  <td>Moe</td>
-                  <td>mary@example.com</td>
-                </tr>
-                <tr>
-                  <td>July</td>
-                  <td>Dooley</td>
-                  <td>july@example.com</td>
-                </tr>
+              <tbody id="tableBody">
               </tbody>
             </table>
+            <div id="alertBox"class="alert alert-danger hidden">
+                No results found
+              </div>
           </div>
 
 

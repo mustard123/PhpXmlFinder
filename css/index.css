@@ -1,7 +1,7 @@
-body{
-   /*  margin: 70px; */
+.hidden{
+    display: none;
 }
 
-#examInput{
-   /*  max-width: 30vw; */
+.visible{
+    display: block;
 }
